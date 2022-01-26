@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_flutter/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+
+import './providers/user_provider.dart';
 import './screens/login.dart';
 import './responsive/mobile_screen_layout.dart';
 import './responsive/web_screen_layout.dart';
 import './responsive/responsive_layout_screen.dart';
 import './utils/colors.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
