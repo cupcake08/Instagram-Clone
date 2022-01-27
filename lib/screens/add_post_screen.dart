@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_flutter/models/user.dart';
-import 'package:instagram_flutter/resources/firebase_methods.dart';
+import 'package:instagram_flutter/resources/firestore_methods.dart';
 import '../providers/user_provider.dart';
 import '../utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -196,9 +196,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         ),
                       ),
                     ),
-                    const Divider(
-                      color: Colors.yellow,
-                    ),
+                    const Divider(),
                   ],
                 )
               ],
