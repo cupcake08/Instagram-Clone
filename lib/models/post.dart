@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 
 class Post {
   final String description;
@@ -9,7 +8,7 @@ class Post {
   final DateTime datePublished;
   final String postUrl;
   final String profImage;
-  final likes;
+  final List likes;
 
   const Post({
     required this.description,
