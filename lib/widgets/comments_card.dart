@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/user.dart';
+import 'package:instagram_flutter/providers/user_provider.dart';
+import 'package:instagram_flutter/resources/firestore_methods.dart';
+import 'package:instagram_flutter/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CommentsCard extends StatefulWidget {
   const CommentsCard({Key? key, required this.snap}) : super(key: key);
-  final snap;
+  final Map<String, dynamic> snap;
   @override
   _CommentsCardState createState() => _CommentsCardState();
 }
 
 class _CommentsCardState extends State<CommentsCard> {
+  bool _liked = false;
   @override
   Widget build(BuildContext context) {
+    final User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 18,
@@ -62,11 +69,34 @@ class _CommentsCardState extends State<CommentsCard> {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: const Icon(
-              Icons.favorite,
-              size: 16,
+          LikeAnimation(
+            isAnimating: widget.snap['likes'].contains(user.uid),
+            smallLike: true,
+            child: InkWell(
+              onTap: () async {
+                setState(() {
+                  _liked = !_liked;
+                });
+                await FirestoreMethods().likeComment(
+                  commentId: widget.snap['commentId'],
+                  likes: widget.snap['likes'],
+                  postId: widget.snap['postId'],
+                  uid: user.uid,
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: widget.snap['likes'].contains(user.uid)
+                    ? const Icon(
+                        Icons.favorite,
+                        color: Colors.redAccent,
+                        size: 16,
+                      )
+                    : const Icon(
+                        Icons.favorite_outline,
+                        size: 16,
+                      ),
+              ),
             ),
           ),
         ],

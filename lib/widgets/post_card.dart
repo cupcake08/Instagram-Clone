@@ -81,35 +81,23 @@ class _PostCardState extends State<PostCard> {
                 ),
                 PopupMenuButton(
                   itemBuilder: (context) => <PopupMenuEntry>[
-                    const PopupMenuItem(
-                      child: Text(
-                        'Report',
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      child: Text(
-                        'Copy Link',
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      child: Text(
-                        'Turn On Post Notifications',
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      child: Text(
+                    PopupMenuItem(
+                      child: const Text(
                         'Share To..',
                       ),
+                      onTap: () {},
                     ),
                     const PopupMenuItem(
                       child: Text(
                         'Unfollow',
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: Text(
-                        'Mute',
-                      ),
+                    PopupMenuItem(
+                      child: const Text('Delete'),
+                      onTap: () async {
+                        await FirestoreMethods()
+                            .deletePost(widget.snap['postId']);
+                      },
                     ),
                   ],
                 ),
