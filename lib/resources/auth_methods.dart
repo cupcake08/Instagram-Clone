@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
 import '../resources/storage_methods.dart';
 import '../models/user.dart' as model;
 
@@ -75,6 +74,17 @@ class AuthMethods {
       }
     } catch (err) {
       res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> logoutUser() async {
+    String res = "Some error occured";
+    try {
+      await _auth.signOut();
+      res = "success";
+    } catch (e) {
+      res = e.toString();
     }
     return res;
   }
