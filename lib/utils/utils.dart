@@ -17,3 +17,11 @@ void showSnackBar(String content, BuildContext context) {
     ),
   );
 }
+
+///@param (count) -> number of comments on a post.
+String commentChecker(int count) {
+  if (count == 1) {
+    return "view 1 comment";
+  }
+  return "view all $count comments";
+}
