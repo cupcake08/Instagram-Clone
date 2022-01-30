@@ -1,11 +1,12 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_flutter/resources/auth_methods.dart';
-import 'package:instagram_flutter/screens/signup_screen.dart';
-import 'package:instagram_flutter/utils/utils.dart';
-import 'package:instagram_flutter/widgets/text_field_input.dart';
+
+import '../resources/auth_methods.dart';
+import '../utils/utils.dart';
 import '../utils/colors.dart';
+import '../widgets/text_field_input.dart';
+import './signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

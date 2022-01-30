@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_flutter/screens/search_screen.dart';
-
-//screens import
+//screen imports
+import '../screens/profile_screen.dart';
+import '../screens/search_screen.dart';
 import '../screens/add_post_screen.dart';
 import '../screens/feed_screen.dart';
 
@@ -12,5 +12,5 @@ const homeScreenItems = [
   SearchScreen(),
   AddPostScreen(),
   Text('fav'),
-  Text('account'),
+  ProfileScreen(),
 ];
