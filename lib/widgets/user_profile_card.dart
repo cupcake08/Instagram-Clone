@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
-import '../models/user.dart';
+// import '../models/user.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({Key? key, required this.user}) : super(key: key);
+  const UserCard({
+    Key? key,
+    required this.followers,
+    required this.following,
+    required this.postLen,
+    this.bio,
+    required this.username,
+    required this.profilePhotoUrl,
+  }) : super(key: key);
 
-  final User user;
+  final int followers;
+  final int following;
+  final int postLen;
+  final String? bio;
+  final String username;
+  final String profilePhotoUrl;
 
   Widget _top(int value, FontWeight weight) {
     return Text(
@@ -35,12 +48,12 @@ class UserCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(user.photoUrl),
+                  backgroundImage: NetworkImage(profilePhotoUrl),
                   radius: 40,
                 ),
                 Column(
                   children: [
-                    _top(0, FontWeight.bold),
+                    _top(postLen, FontWeight.bold),
                     const Text(
                       'Posts',
                       style: TextStyle(fontWeight: FontWeight.w400),
@@ -51,7 +64,7 @@ class UserCard extends StatelessWidget {
                   onPressed: () {},
                   child: Column(
                     children: [
-                      _top(user.followers.length, FontWeight.bold),
+                      _top(followers, FontWeight.bold),
                       const Text(
                         'Followers',
                         style: TextStyle(fontWeight: FontWeight.w400),
@@ -64,7 +77,7 @@ class UserCard extends StatelessWidget {
                   onPressed: () {},
                   child: Column(
                     children: [
-                      _top(user.following.length, FontWeight.bold),
+                      _top(following, FontWeight.bold),
                       const Text(
                         'Following',
                         style: TextStyle(fontWeight: FontWeight.w400),
@@ -81,17 +94,18 @@ class UserCard extends StatelessWidget {
               left: 16,
             ),
             child: Text(
-              user.username,
+              username,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              top: 8,
+          if (bio != null)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                top: 8,
+              ),
+              child: Text(bio as String),
             ),
-            child: Text(user.bio),
-          ),
         ],
       ),
     );
