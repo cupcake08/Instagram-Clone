@@ -82,6 +82,7 @@ class _CommentsCardState extends State<CommentsCard> {
                   likes: widget.snap['likes'],
                   postId: widget.snap['postId'],
                   uid: user.uid,
+                  context: context,
                 );
               },
               child: Container(
