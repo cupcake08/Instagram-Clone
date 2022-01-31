@@ -18,8 +18,7 @@ class CommentsScreen extends StatefulWidget {
 
 class _CommentsScreenState extends State<CommentsScreen> {
   final TextEditingController _commentController = TextEditingController();
-  // bool _isLoading = false;
-
+  bool noComments = false;
   @override
   void dispose() {
     super.dispose();
@@ -42,18 +41,28 @@ class _CommentsScreenState extends State<CommentsScreen> {
             .collection('comments')
             .orderBy('datePublished', descending: true)
             .snapshots(),
-        builder: (context, snapshot) {
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          return ListView.builder(
-            itemBuilder: (context, index) => CommentsCard(
-              snap: (snapshot.data! as dynamic).docs[index].data(),
-            ),
-            itemCount: (snapshot.data! as dynamic).docs.length,
-          );
+          if (snapshot.data!.docs.isEmpty) {
+            noComments = true;
+          } else {
+            noComments = false;
+          }
+          return noComments
+              ? const Center(
+                  child: Text("No Comments"),
+                )
+              : ListView.builder(
+                  itemBuilder: (context, index) => CommentsCard(
+                    snap: snapshot.data!.docs[index].data(),
+                  ),
+                  itemCount: snapshot.data!.docs.length,
+                );
         },
       ),
       bottomNavigationBar: SafeArea(
@@ -94,6 +103,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     profilePic: user.photoUrl,
                     uid: user.uid,
                     username: user.username,
+                    context: context,
                   );
                   setState(() {
                     _commentController.text = "";

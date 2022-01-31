@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/resources/storage_methods.dart';
+import 'package:instagram_flutter/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -41,7 +43,8 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> likePost(String postId, String uid, List likes) async {
+  Future<void> likePost(
+      String postId, String uid, List likes, BuildContext context) async {
     try {
       if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
@@ -53,7 +56,7 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
-      print(e.toString());
+      showSnackBar(e.toString(), context);
     }
   }
 
@@ -63,6 +66,7 @@ class FirestoreMethods {
     required String commentText,
     required String profilePic,
     required String username,
+    required BuildContext context,
   }) async {
     try {
       if (commentText.isNotEmpty) {
@@ -84,10 +88,10 @@ class FirestoreMethods {
           'postId': postId,
         });
       } else {
-        print("Text is empty.");
+        showSnackBar("text is empty!", context);
       }
     } catch (e) {
-      print(e.toString());
+      showSnackBar(e.toString(), context);
     }
   }
 
@@ -96,6 +100,7 @@ class FirestoreMethods {
     required String uid,
     required List likes,
     required String postId,
+    required BuildContext context,
   }) async {
     try {
       if (likes.contains(uid)) {
@@ -118,15 +123,15 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
-      print(e.toString());
+      showSnackBar(e.toString(), context);
     }
   }
 
-  Future<void> deletePost(String postId) async {
+  Future<void> deletePost(String postId, BuildContext context) async {
     try {
       await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
-      print(e.toString());
+      showSnackBar(e.toString(), context);
     }
   }
 }
