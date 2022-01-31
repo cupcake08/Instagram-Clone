@@ -24,7 +24,6 @@ class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
 
   int commentLen = 0;
-
   @override
   void initState() {
     super.initState();
@@ -50,7 +49,7 @@ class _PostCardState extends State<PostCard> {
     final model.User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         children: [
           Container(
@@ -96,7 +95,7 @@ class _PostCardState extends State<PostCard> {
                       child: const Text('Delete'),
                       onTap: () async {
                         await FirestoreMethods()
-                            .deletePost(widget.snap['postId']);
+                            .deletePost(widget.snap['postId'], context);
                       },
                     ),
                   ],
@@ -110,8 +109,8 @@ class _PostCardState extends State<PostCard> {
               setState(() {
                 isLikeAnimating = true;
               });
-              await FirestoreMethods().likePost(
-                  widget.snap['postId'], user.uid, widget.snap['likes']);
+              await FirestoreMethods().likePost(widget.snap['postId'], user.uid,
+                  widget.snap['likes'], context);
             },
             child: Stack(
               alignment: Alignment.center,
@@ -156,8 +155,8 @@ class _PostCardState extends State<PostCard> {
                 smallLike: true,
                 child: IconButton(
                   onPressed: () async {
-                    await FirestoreMethods().likePost(
-                        widget.snap['postId'], user.uid, widget.snap['likes']);
+                    await FirestoreMethods().likePost(widget.snap['postId'],
+                        user.uid, widget.snap['likes'], context);
                   },
                   icon: widget.snap['likes'].contains(user.uid)
                       ? const Icon(
@@ -215,7 +214,7 @@ class _PostCardState extends State<PostCard> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(
-                    top: 8,
+                    top: 4,
                   ),
                   child: RichText(
                     text: TextSpan(
@@ -248,9 +247,7 @@ class _PostCardState extends State<PostCard> {
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Text(
                         commentChecker(commentLen),
                         style: const TextStyle(
@@ -261,9 +258,7 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     DateFormat.yMMMMd('en_US')
                         .format(widget.snap['datePublished'].toDate()),
