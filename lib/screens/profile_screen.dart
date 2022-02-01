@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .get();
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('uid', isEqualTo: widget.uid)
           .get();
       userData = userSnap.data()!;
       posts = postSnap.docs.length;
@@ -175,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             childAspectRatio: 1,
-                            crossAxisSpacing: 5,
+                            crossAxisSpacing: 1.5,
                             mainAxisSpacing: 1.5,
                           ),
                           itemBuilder: (context, index) {
