@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_flutter/widgets/custom_button.dart';
 
+import '../resources/firestore_methods.dart';
+import '../widgets/custom_button.dart';
 import '../utils/colors.dart';
 import '../widgets/user_profile_card.dart';
 import '../resources/auth_methods.dart';
@@ -103,26 +104,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       profilePhotoUrl: userData['photoUrl'],
                       bio: userData['bio'],
                     ),
-                    // InkWell(
-                    //   onTap: () {},
-                    //   // child: const Text('Edit Profile'),
-                    //   child: Container(
-                    //     padding: const EdgeInsets.symmetric(
-                    //       horizontal: 16,
-                    //       vertical: 5,
-                    //     ),
-                    //     width: MediaQuery.of(context).size.width * 0.9,
-                    //     height: 30,
-                    //     // transformAlignment: Alignment.center,
-                    //     decoration: BoxDecoration(
-                    //         border: Border.all(color: primaryColor),
-                    //         borderRadius: BorderRadius.circular(6)),
-                    //     child: const Text(
-                    //       'Edit Profile',
-                    //     ),
-                    //     alignment: Alignment.center,
-                    //   ),
-                    // ),
                     FirebaseAuth.instance.currentUser!.uid == widget.uid
                         ? CustomButton(
                             textColor: Colors.white,
@@ -137,16 +118,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderColor: Colors.grey,
                                 text: 'UnFollow',
                                 backgroundColor: Colors.white,
-                                func: () {},
+                                func: () async {
+                                  await FirestoreMethods().following(
+                                    currentUserUid:
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    displayUserUid: userData['uid'],
+                                    context: context,
+                                  );
+                                  setState(() {
+                                    isFollowing = false;
+                                    followers--;
+                                  });
+                                },
                               )
                             : CustomButton(
                                 textColor: Colors.white,
                                 borderColor: Colors.blueAccent,
                                 text: 'Follow',
-                                func: () {},
+                                func: () async {
+                                  await FirestoreMethods().following(
+                                    currentUserUid:
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    displayUserUid: userData['uid'],
+                                    context: context,
+                                  );
+                                  setState(() {
+                                    isFollowing = true;
+                                    followers++;
+                                  });
+                                },
                                 backgroundColor: Colors.blueAccent,
                               ),
                     const Divider(),
+                    FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection('posts')
+                          .where(
+                            'uid',
+                            isEqualTo: widget.uid,
+                          )
+                          .get(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          );
+                        }
+
+                        return GridView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 1.5,
+                          ),
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot doc = snapshot.data!.docs[index];
+                            return SizedBox(
+                              child: Image(
+                                image: NetworkImage(doc['postUrl']),
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
               ],
