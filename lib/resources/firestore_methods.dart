@@ -158,6 +158,20 @@ class FirestoreMethods {
 
   Future<void> deletePost(String postId, BuildContext context) async {
     try {
+      QuerySnapshot snap = await _firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .get();
+      List<QueryDocumentSnapshot<Object?>> comments = snap.docs.toList();
+      for (QueryDocumentSnapshot<Object?> c in comments) {
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc((c.data()! as dynamic)['commentId'])
+            .delete();
+      }
       await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
       showSnackBar(e.toString(), context);
