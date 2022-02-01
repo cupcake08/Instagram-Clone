@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:instagram_flutter/screens/profile_screen.dart';
 import '../utils/colors.dart';
+import './profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -14,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
   bool showUsers = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -51,12 +52,18 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: CircularProgressIndicator.adaptive(),
                   );
                 }
-                // print((snapshot.data! as dynamic).docs[0]['photoUrl']);
-                return ListView.builder(
+                return ListView.separated(
                   itemCount: snapshot.data!.docs.length,
-                  itemExtent: 16,
+                  // itemExtent: 16,
                   itemBuilder: (context, index) {
-                    return InkWell(
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            snapshot.data!.docs[index]['photoUrl']),
+                      ),
+                      title: Text(
+                        snapshot.data!.docs[index]['username'],
+                      ),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -65,17 +72,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                         );
                       },
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              snapshot.data!.docs[index]['photoUrl']),
-                        ),
-                        title: Text(
-                          snapshot.data!.docs[index]['username'],
-                        ),
-                      ),
                     );
                   },
+                  separatorBuilder: (context, index) => const Divider(),
                 );
               },
             )
@@ -92,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisCount: 3,
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) =>
-                      Image.network(snapshot.data!.docs[index]['photoUrl']),
+                      Image.network(snapshot.data!.docs[index]['postUrl']),
                   staggeredTileBuilder: (index) => StaggeredTile.count(
                     (index % 7 == 0 ? 2 : 1),
                     (index % 7 == 0 ? 2 : 1),
