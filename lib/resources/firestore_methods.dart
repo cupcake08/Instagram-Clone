@@ -127,6 +127,35 @@ class FirestoreMethods {
     }
   }
 
+  Future<void> following({
+    required String currentUserUid,
+    required String displayUserUid,
+    required BuildContext context,
+  }) async {
+    try {
+      DocumentSnapshot snap =
+          await _firestore.collection('users').doc(currentUserUid).get();
+      List following = (snap.data()! as dynamic)['following'];
+      if (following.contains(displayUserUid)) {
+        await _firestore.collection('users').doc(displayUserUid).update({
+          'followers': FieldValue.arrayRemove([currentUserUid]),
+        });
+        await _firestore.collection('users').doc(currentUserUid).update({
+          'following': FieldValue.arrayRemove([displayUserUid]),
+        });
+      } else {
+        await _firestore.collection('users').doc(displayUserUid).update({
+          'followers': FieldValue.arrayUnion([currentUserUid]),
+        });
+        await _firestore.collection('users').doc(currentUserUid).update({
+          'following': FieldValue.arrayUnion([displayUserUid]),
+        });
+      }
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+  }
+
   Future<void> deletePost(String postId, BuildContext context) async {
     try {
       await _firestore.collection('posts').doc(postId).delete();
