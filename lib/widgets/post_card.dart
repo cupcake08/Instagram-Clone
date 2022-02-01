@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
@@ -86,18 +87,22 @@ class _PostCardState extends State<PostCard> {
                       ),
                       onTap: () {},
                     ),
-                    const PopupMenuItem(
-                      child: Text(
-                        'Unfollow',
+                    if (FirebaseAuth.instance.currentUser!.uid !=
+                        widget.snap['uid'])
+                      const PopupMenuItem(
+                        child: Text(
+                          'Unfollow',
+                        ),
                       ),
-                    ),
-                    PopupMenuItem(
-                      child: const Text('Delete'),
-                      onTap: () async {
-                        await FirestoreMethods()
-                            .deletePost(widget.snap['postId'], context);
-                      },
-                    ),
+                    if (FirebaseAuth.instance.currentUser!.uid ==
+                        widget.snap['uid'])
+                      PopupMenuItem(
+                        child: const Text('Delete'),
+                        onTap: () async {
+                          await FirestoreMethods()
+                              .deletePost(widget.snap['postId'], context);
+                        },
+                      ),
                   ],
                 ),
               ],
