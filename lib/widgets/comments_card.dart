@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/models/user.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
+import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -56,13 +57,31 @@ class _CommentsCardState extends State<CommentsCard> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      DateFormat.yMMMMd('en_US')
-                          .format(widget.snap['datePublished'].toDate()),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          DateFormat.yMMMMd('en_US')
+                              .format(widget.snap['datePublished'].toDate()),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: secondaryColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        if (widget.snap['likes'].length > 0)
+                          Text(
+                            '${widget.snap['likes'].length} likes',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: secondaryColor,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ],
