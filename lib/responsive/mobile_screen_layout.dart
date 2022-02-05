@@ -20,12 +20,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     pageController = PageController();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    pageController.dispose();
-  }
-
   void navigationTapped(int page) {
     pageController.jumpToPage(page);
   }
@@ -34,6 +28,12 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     setState(() {
       _page = page;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
   }
 
   @override
